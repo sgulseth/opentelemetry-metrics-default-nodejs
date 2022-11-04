@@ -3,7 +3,7 @@ import {
 	ObservableUpDownCounter,
 } from "@opentelemetry/api-metrics";
 import { Config } from "../config";
-import v8 from "v8";
+import * as v8 from "v8";
 
 const METRICS = ["total", "used", "available"];
 const NODEJS_HEAP_SIZE: Record<string, string> = {};

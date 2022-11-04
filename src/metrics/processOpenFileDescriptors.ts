@@ -1,7 +1,7 @@
 import { MetricAttributes } from "@opentelemetry/api-metrics";
 import { Config } from "../config";
-import fs from "fs";
-import process from "process";
+import * as fs from "fs";
+import * as process from "process";
 
 const PROCESS_OPEN_FDS = "process_open_fds";
 

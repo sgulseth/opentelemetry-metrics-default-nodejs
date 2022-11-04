@@ -1,7 +1,7 @@
 import { MetricAttributes } from "@opentelemetry/api-metrics";
 import { Config } from "../config";
 
-import fs from "fs";
+import * as fs from "fs";
 
 const values = ["VmSize", "VmRSS", "VmData"];
 

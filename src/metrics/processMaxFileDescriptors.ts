@@ -1,6 +1,6 @@
 import { MetricAttributes } from "@opentelemetry/api-metrics";
 import { Config } from "../config";
-import fs from "fs";
+import * as fs from "fs";
 
 const PROCESS_MAX_FDS = "process_max_fds";
 
@@ -16,7 +16,7 @@ export function processMaxFileDescriptors<Attributes extends MetricAttributes>(
 			const lines = limits.split("\n");
 			for (const line of lines) {
 				if (line.startsWith("Max open files")) {
-					const parts = line.split(/ {2}+/);
+					const parts = line.split(/ {2,}/);
 					maxFds = Number(parts[1]);
 					break;
 				}

@@ -1,4 +1,5 @@
-import perfHooks, { constants } from "perf_hooks";
+import * as perfHooks from "perf_hooks";
+import { constants } from "perf_hooks";
 import { MetricAttributes } from "@opentelemetry/api-metrics";
 
 import { Config } from "../config";

@@ -1,4 +1,4 @@
-import perfHooks from "perf_hooks";
+import * as perfHooks from "perf_hooks";
 import {
 	BatchObservableResult,
 	ObservableUpDownCounter,

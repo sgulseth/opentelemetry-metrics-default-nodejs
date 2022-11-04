@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "module": "es6",
     "moduleResolution": "node",
     "target": "es6",
 		"strict": true,
     "sourceMap": true,
     "declaration": true,
-    "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declarationDir": "dist/types",
+    "noImplicitAny": true,
     "outDir": "dist/lib",
     "typeRoots": [
       "node_modules/@types"
