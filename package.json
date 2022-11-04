@@ -1,6 +1,6 @@
 {
   "name": "@sgulseth/opentelemetry-metrics-default-nodejs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Package to collect default node.js metrics",
   "main": "./dist/lib/index.js",
   "types": "./dist/types/index.d.ts",
