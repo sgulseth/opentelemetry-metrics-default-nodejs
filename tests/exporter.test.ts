@@ -1,5 +1,5 @@
-import test from "node:test";
-import assert from "assert/strict";
+import {test} from "node:test";
+import * as assert from "assert/strict";
 
 import { MeterProvider } from "@opentelemetry/sdk-metrics";
 import { PrometheusExporter } from "@opentelemetry/exporter-prometheus";
@@ -16,10 +16,18 @@ test("exporter", async () => {
 
   collectDefaultMetrics({ meter });
 
-  const collectedMetrics = await prometheusExporter.collect();
+  {
+    const collectedMetrics = await prometheusExporter.collect();
 
-  console.log(collectedMetrics.resourceMetrics.scopeMetrics[0].metrics);
-  assert.equal(collectedMetrics.errors.length, 0);
+    assert.equal(collectedMetrics.errors.length, 0);
+  }
 
-  assert.equal(1 + 2, 3);
+  await new Promise<void>(resolve => setTimeout(() => resolve(), 500))
+  {
+    const collectedMetrics = await prometheusExporter.collect();
+
+    console.log(collectedMetrics.resourceMetrics.scopeMetrics[0].metrics);
+    assert.equal(collectedMetrics.resourceMetrics.scopeMetrics[0].metrics.length, 25);
+    assert.equal(collectedMetrics.errors.length, 0);
+  }
 });
