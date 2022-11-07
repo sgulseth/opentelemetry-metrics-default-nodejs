@@ -18,19 +18,6 @@ const NODEJS_EVENTLOOP_LAG_P50 = "nodejs_eventloop_lag_p50_seconds";
 const NODEJS_EVENTLOOP_LAG_P90 = "nodejs_eventloop_lag_p90_seconds";
 const NODEJS_EVENTLOOP_LAG_P99 = "nodejs_eventloop_lag_p99_seconds";
 
-function reportEventloopLag<T extends MetricAttributes>(
-	start: [number, number],
-	batch: BatchObservableResult,
-	gauge: ObservableUpDownCounter<T>,
-	labels: T,
-) {
-	const delta = process.hrtime(start);
-	const nanosec = delta[0] * 1e9 + delta[1];
-	const seconds = nanosec / 1e9;
-
-	batch.observe(gauge, seconds, labels);
-}
-
 export function reportEventloop<Attributes extends MetricAttributes>(
 	config: Config<Attributes>,
 ) {
@@ -93,11 +80,23 @@ export function reportEventloop<Attributes extends MetricAttributes>(
 		},
 	);
 
+	lag.addCallback(
+		(meter) =>
+			new Promise((resolve) => {
+				const start = process.hrtime();
+				setImmediate(() => {
+					const delta = process.hrtime(start);
+					const nanosec = delta[0] * 1e9 + delta[1];
+					const seconds = nanosec / 1e9;
+
+					meter.observe(seconds, labels);
+					resolve();
+				});
+			}),
+	);
+
 	meter.addBatchObservableCallback(
 		(result) => {
-			const start = process.hrtime();
-			setImmediate(reportEventloopLag, start, result, lag, labels);
-
 			result.observe(lagMin, histogram.min / 1e9, labels);
 			result.observe(lagMax, histogram.max / 1e9, labels);
 			result.observe(lagMean, histogram.mean / 1e9, labels);
@@ -108,6 +107,6 @@ export function reportEventloop<Attributes extends MetricAttributes>(
 
 			histogram.reset();
 		},
-		[lag, lagMin, lagMax, lagMean, lagStddev, lagP50, lagP90, lagP99],
+		[lagMin, lagMax, lagMean, lagStddev, lagP50, lagP90, lagP99],
 	);
 }
